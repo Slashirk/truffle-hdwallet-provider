@@ -45,13 +45,14 @@ let WalletProvider = function(wallet, password, provider_url, address_index) {
   }
 
   wallet = Wallet.fromV3(wallet, password, true);
-  address = "0x" + this.wallet.getAddress().toString("hex");
+  address = "0x" + wallet.getAddress().toString("hex");
 
   engine = new ProviderEngine();
-  engine.addProvider(new WalletSubprovider(this.wallet, {}));
+  engine.addProvider(new WalletSubprovider(wallet, {}));
   engine.addProvider(new FiltersSubprovider());
   engine.addProvider(new Web3Subprovider(new Web3.providers.HttpProvider(provider_url)));
-  return engine.start(); // Required by the provider engine.
+  engine.start();
+  return engine;
 };
 
 let MnemonicProvider = function(mnemonic, provider_url, address_index=0, num_addresses=1) {
